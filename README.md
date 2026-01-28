@@ -30,19 +30,3 @@ An AI-powered urban liveability and environmental outcomes analysis platform for
 - Supabase (optional persistence)
 - data.gov.sg APIs
 
-## Getting Started
-
-```bash
-npm install
-npm run dev
-```
-
-Create a `.env` file with:
-```
-VITE_GEMINI_API_KEY=your_gemini_key
-VITE_SUPABASE_URL=your_supabase_url (optional)
-VITE_SUPABASE_ANON_KEY=your_supabase_key (optional)
-```
-
-## License
-MIT
