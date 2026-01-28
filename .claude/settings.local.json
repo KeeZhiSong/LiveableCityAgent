@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -w \"\\\\n\\\\nHTTP Status: %{http_code}\" \"https://threeecho.app.n8n.cloud/webhook/agent-recommendations\")",
+      "Bash(curl:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npm install:*)",
+      "Bash(xargs sed -i '' 's/text-emerald-100\\\\/80/text-text-secondary/g')",
+      "Bash(xargs sed:*)",
+      "Bash(tree:*)",
+      "Bash(lsof:*)",
+      "Bash(python3:*)",
+      "Bash(xargs:*)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git add:*)",
+      "Bash(git reset:*)",
+      "Bash(git rm:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit: LiveableCity Agent with dual score system\n\nFeatures:\n- Urban liveability scoring \\(transport, greenSpace, airQuality, amenities, safety\\)\n- Environmental outcomes scoring \\(air quality, green coverage, vector safety, climate\\)\n- Multi-agent AI system with Monitor, Analyst, Recommender, Critic, and Vision agents\n- Agent memory and learning loop with Supabase/localStorage persistence\n- Multi-agent deliberation \\(Recommender-Critic debate\\)\n- Interactive Singapore district map with dual score tooltips\n- Analytics dashboard with liveability/environmental dimension toggle\n- Gemini AI-powered improvement plans and impact visualization\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+    ]
+  }
+}
