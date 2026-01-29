@@ -12,7 +12,8 @@ export function usePredictiveInsights(pollInterval = POLL_INTERVAL) {
   const fetchInsights = useCallback(async () => {
     if (!supabase) {
       setIsLoading(false);
-      setError('Supabase not configured');
+      setInsights([]);
+      setError(null);
       return;
     }
 
@@ -26,14 +27,19 @@ export function usePredictiveInsights(pollInterval = POLL_INTERVAL) {
         .limit(50);
 
       if (fetchError) {
-        setError(fetchError.message);
+        // Table may not exist — treat as empty rather than crashing
+        console.warn('[PredictiveInsights] Fetch error:', fetchError.message);
+        setInsights([]);
+        setError(null);
       } else {
         setInsights(data || []);
         setLastUpdated(new Date().toISOString());
         setError(null);
       }
     } catch (err) {
-      setError(err.message);
+      console.warn('[PredictiveInsights] Exception:', err.message);
+      setInsights([]);
+      setError(null);
     } finally {
       setIsLoading(false);
     }
