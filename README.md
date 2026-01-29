@@ -5,43 +5,51 @@ Built for Hack for Cities 2026 — SMU x IBM Hackathon.
 
 ![Dashboard](docs/images/Main%20Dashboard.png)
 
-Table of Contents
-Problem Statement
-Solution Overview
-Features
-Architecture
-Tech Stack
-Data Sources
-Supabase Schema
-Getting Started
-Environment Variables
-Project Structure
-Workflow Explanation
-License
-Problem Statement
-How can Agentic AI be used to improve efficiency in collectively improving urban liveability and environmental outcomes at a district or nationwide level?
+## Table of Contents
+
+- [Problem Statement](#problem-statement)
+- [Solution Overview](#solution-overview)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Data Sources](#data-sources)
+- [Supabase Schema](#supabase-schema)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Project Structure](#project-structure)
+- [Workflow Explanation](#workflow-explanation)
+
+## Problem Statement
+
+**How can Agentic AI be used to improve efficiency in collectively improving urban liveability and environmental outcomes at a district or nationwide level?**
 
 Urban planning in Singapore today relies on fragmented dashboards, periodic reports, and manual cross-referencing of datasets. A planner assessing a district must individually consult PSI readings, transport maps, park locations, dengue alerts, and rainfall data — then synthesise these into recommendations through their own expertise. This process is slow, inconsistent across planners, and reactive: problems are addressed after they manifest rather than predicted and prevented.
 
 Existing smart city platforms provide data visualisation but lack agency. They display metrics without interpreting them, show scores without generating plans, and present findings without questioning their own conclusions.
 
-Solution Overview
+## Solution Overview
+
 LiveableCity Agent deploys five autonomous AI agents that work as a coordinated pipeline:
 
-Monitor real-time data from Singapore government APIs
-Analyse districts across liveability and environmental dimensions
-Recommend targeted improvements via Gemini AI
-Critique those recommendations through adversarial debate
-Visualise the proposed improvements with AI image generation
+1. **Monitor** real-time data from Singapore government APIs
+2. **Analyse** districts across liveability and environmental dimensions
+3. **Recommend** targeted improvements via Gemini AI
+4. **Critique** those recommendations through adversarial debate
+5. **Visualise** the proposed improvements with AI image generation
+
 The system maintains persistent memory across sessions, learns from past outcomes, and generates predictive alerts — shifting urban planning from reactive dashboard monitoring to proactive, AI-driven decision support.
 
-Features
-📊 Dual Scoring System
+## Features
+
+### 📊 Dual Scoring System
+
 Every district receives two independent scores (0–100):
 
-Dimension	Pillars	Weights
-Liveability	Transport Access, Green Space, Air Quality, Amenities, Safety	25%, 20%, 20%, 20%, 15%
-Environmental	Air Quality Impact, Green Coverage, Vector Safety, Climate Resilience	35%, 30%, 20%, 15%
+| Dimension | Pillars | Weights |
+|-----------|---------|---------|
+| **Liveability** | Transport Access, Green Space, Air Quality, Amenities, Safety | 25%, 20%, 20%, 20%, 15% |
+| **Environmental** | Air Quality Impact, Green Coverage, Vector Safety, Climate Resilience | 35%, 30%, 20%, 15% |
+
 Both scores are visible across the entire platform — map tooltips, side panel, leaderboard, and analytics.
 
 ![Dual ScoreRings](docs/images/Sidepanel%20with%20dual%20ScoreRings.png)
@@ -60,16 +68,18 @@ The pipeline is visualised in real-time with animated status indicators for each
 
 ![Agent Pipeline](docs/images/AgentPipeline.png)
 
-🧠 Agent Memory & Learning
+### 🧠 Agent Memory & Learning
+
 The system remembers past recommendations and their outcomes, building institutional knowledge over time.
 
-How it works:
+**How it works:**
 
-After each recommendation cycle, the system saves the district, recommendation content, and score snapshot to persistent storage
-On subsequent analyses of the same district, past memories are injected into the Gemini prompt as context
-The getContextForPrompt() method formats the 5 most recent memories with outcome data (score deltas)
-The AI adapts: avoids repeating failed suggestions, doubles down on what worked
-Storage: Supabase (primary) with automatic localStorage fallback if Supabase is unavailable.
+1. After each recommendation cycle, the system saves the district, recommendation content, and score snapshot to persistent storage
+2. On subsequent analyses of the same district, past memories are injected into the Gemini prompt as context
+3. The `getContextForPrompt()` method formats the 5 most recent memories with outcome data (score deltas)
+4. The AI adapts: avoids repeating failed suggestions, doubles down on what worked
+
+**Storage:** Supabase (primary) with automatic localStorage fallback if Supabase is unavailable.
 
 ![Memory Panel](docs/images/Memory%20Panel.png)
 
