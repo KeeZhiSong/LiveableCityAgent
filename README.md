@@ -144,30 +144,39 @@ Architecture
 System Architecture
 The platform is built as a five-layer stack:
 
-Frontend — React 19 + Vite 7 with four main pages: Dashboard, Analytics, Urban Vision, and Predictive Insights
-Agent Pipeline — Five sequential agents: Monitor → Analyst → Recommender → Critic → Vision
-Service Layer — Three core services:
-agentService.js — Orchestrates the agent pipeline, calls Gemini, manages deliberation
-scoringService.js — Computes dual liveability and environmental scores from raw data
-agentMemory.js — Persists recommendations and outcomes to Supabase (falls back to localStorage)
-Data Layer — Four data sources feed the scoring engine:
-data.gov.sg — Real-time PSI readings and rainfall station data
-GeoJSON files — Bundled datasets for parks, hawkers, supermarkets, dengue clusters, gyms, childcare, cycling paths
-OneMap API — Population and demographic data
-Supabase — Two tables: agent_memory (learning loop) and predictive_insights (forecasts)
-AI Models — Two providers:
-Google Gemini — gemini-2.0-flash for recommendations, critique, and rebuttal; gemini-2.0-flash-exp-image-generation for vision improvements
-OpenAI GPT-4o — Urban image analysis in the Vision feature
-Data Pipeline
+## Architecture
+
+**Frontend** — React 19 + Vite 7 with four main pages: Dashboard, Analytics, Urban Vision, and Predictive Insights
+
+**Agent Pipeline** — Five sequential agents: Monitor → Analyst → Recommender → Critic → Vision
+
+**Service Layer** — Three core services:
+- **agentService.js** — Orchestrates the agent pipeline, calls Gemini, manages deliberation
+- **scoringService.js** — Computes dual liveability and environmental scores from raw data
+- **agentMemory.js** — Persists recommendations and outcomes to Supabase (falls back to localStorage)
+
+**Data Layer** — Four data sources feed the scoring engine:
+- **data.gov.sg** — Real-time PSI readings and rainfall station data
+- **GeoJSON files** — Bundled datasets for parks, hawkers, supermarkets, dengue clusters, gyms, childcare, cycling paths
+- **OneMap API** — Population and demographic data
+- **Supabase** — Two tables: `agent_memory` (learning loop) and `predictive_insights` (forecasts)
+
+**AI Models** — Two providers:
+- **Google Gemini** — `gemini-2.0-flash` for recommendations, critique, and rebuttal; `gemini-2.0-flash-exp-image-generation` for vision improvements
+- **OpenAI GPT-4o** — Urban image analysis in the Vision feature
+
+## Data Pipeline
+
 Raw data flows through three stages:
 
-Stage 1: Data Ingestion — The scoring service fetches PSI and rainfall readings from data.gov.sg in real-time (cached for 10 minutes), and loads bundled GeoJSON datasets for parks, hawkers, supermarkets, dengue clusters, gyms, and childcare centres.
+**Stage 1: Data Ingestion** — The scoring service fetches PSI and rainfall readings from data.gov.sg in real-time (cached for 10 minutes), and loads bundled GeoJSON datasets for parks, hawkers, supermarkets, dengue clusters, gyms, and childcare centres.
 
-Stage 2: Score Computation — For each district centroid, the service runs haversine distance calculations to count nearby amenities within defined radii (2km for amenities, 3km for parks, 1km for dengue clusters). PSI readings are converted to air quality scores, and rainfall readings are converted to climate resilience scores. Two weighted scores are produced:
+**Stage 2: Score Computation** — For each district centroid, the service runs haversine distance calculations to count nearby amenities within defined radii (2km for amenities, 3km for parks, 1km for dengue clusters). PSI readings are converted to air quality scores, and rainfall readings are converted to climate resilience scores. Two weighted scores are produced:
 
-Liveability Score = Transport (25%) + Air Quality (20%) + Green Space (20%) + Amenities (20%) + Safety (15%)
-Environmental Score = Air Quality (35%) + Green Coverage (30%) + Vector Safety (20%) + Climate (15%)
-Stage 3: Agent Processing — The agent service takes the computed scores, injects past memory context from Supabase, calls Gemini to generate improvement recommendations, runs the Critic → Rebuttal deliberation, and saves the result back to agent memory for future learning.
+- **Liveability Score** = Transport (25%) + Air Quality (20%) + Green Space (20%) + Amenities (20%) + Safety (15%)
+- **Environmental Score** = Air Quality (35%) + Green Coverage (30%) + Vector Safety (20%) + Climate (15%)
+
+**Stage 3: Agent Processing** — The agent service takes the computed scores, injects past memory context from Supabase, calls Gemini to generate improvement recommendations, runs the Critic → Rebuttal deliberation, and saves the result back to agent memory for future learning.
 
 Scoring Methodology
 Air Quality — PSI values are mapped to scores: 0–50 PSI = 85–95 (Good), 51–100 = 65–85 (Moderate), 101–150 = 45–65 (Unhealthy), 151–200 = 30–45 (Very Unhealthy), 200+ = 10–30 (Hazardous).
